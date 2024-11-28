@@ -1,0 +1,51 @@
+{{ block title }}
+
+{{ endblock }}
+
+{{ block content }}
+
+
+<div class="card mb-2">
+    <div class="card-body bg-light">
+        {% for field in form %}
+
+        <div class="form-group">
+
+            <label>{{ field.label }}</label>
+
+            <table class="table table-borderless mb-5 mt-4">
+                <tbody>
+                <tr>
+                    {{ for choice in field.choices }}
+                    <td style="width: 10%">
+                        <div class="text-center m-auto">
+                            <input type="radio" name={{field.name}} id="inlineRadio{{field.name}}_{{choice}}"
+                                   value="{{choice}}" required><br>
+                            <label for="inlineRadio{{field.name}}_{{choice}}"><i>{{choice}}</i></label>
+                        </div>
+                    </td>
+                    {{ endfor }}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    $(document).ready(function (e) {
+        labels = document.getElementsByTagName("label");
+
+        for (var i = 0; i < labels.length; i++) {
+            labels[i].innerHTML = labels[i].innerHTML.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+        }
+    });
+</script>
+
+
+
+
+
+{{ next_button }}
+{{ endblock }}
+

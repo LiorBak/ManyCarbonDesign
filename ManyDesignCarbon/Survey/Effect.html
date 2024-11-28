@@ -1,0 +1,44 @@
+{{ block title }}
+
+{{ endblock }}
+
+{{ block content }}
+
+
+<div class="card mb-2">
+    <div class="card-body bg-light">
+        <p>
+            Do you agree or disagree with the following statements? A carbon tax on all CO2
+            emissions would ...
+        </p>
+
+
+        {% for field in form %}
+
+        <div class="form-group">
+
+            <label class="ms-4">{{ field.label }}</label>
+
+            <table class="table table-borderless mb-5 mt-4">
+                <tbody>
+                <tr>
+                    {{ for choice in field.choices }}
+                    <td style="width: 10%">
+                        <div class="text-center m-auto">
+                            <input type="radio" name={{field.name}} id="inlineRadio{{field.name}}_{{choice}}"
+                                   value="{{choice}}" required><br>
+                            <label for="inlineRadio{{field.name}}_{{choice}}"><i>{{choice}}</i></label>
+                        </div>
+                    </td>
+                    {{ endfor }}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{{ next_button }}
+{{ endblock }}
+

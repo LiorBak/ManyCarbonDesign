@@ -1,0 +1,51 @@
+{{ block title }}
+
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card mb-2">
+    <div class="card-body bg-light">
+        {% for field in form %}
+
+        {% if field.name == 'pol_orientation' %}
+
+        <div class="form-group">
+
+            <label>{{ field.label }}</label>
+
+            <table class="table table-borderless mb-4">
+                <tbody>
+                <tr>
+                    {{ for i in 1,2,3,4,5 }}
+                    <td style="width: 10%">
+                        <div class="text-center m-auto">
+                            <label for="inlineRadio{{i}}"><i>{{ i }}</i></label><br>
+                            <input type="radio" name={{field.name}} id="inlineRadio{{i}}"
+                                   value={{i}} required><br>
+                            <label for="inlineRadio{{i}}"><i>{{ if i == 1}}Left{{elif i == 5}}Right{{else}}
+                                {{endif}}</i></label>
+                        </div>
+                    </td>
+                    {{ endfor }}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div class="form-group">
+            <!-- Label for each field -->
+            <label>{{ field.label }}</label>
+
+            <!-- Render the field itself, with attributes you can set in the form class or inline here -->
+            {{ field }}
+
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{{ next_button }}
+{{ endblock }}
