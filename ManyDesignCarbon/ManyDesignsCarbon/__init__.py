@@ -6,7 +6,7 @@ doc = ''
 class C(BaseConstants):
     NAME_IN_URL = 'ManyDesignsCarbon'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 20
+    NUM_ROUNDS = 1
     C = cu(0)
     TAX = cu(0)
     ENDOWMENT = cu(14000)
