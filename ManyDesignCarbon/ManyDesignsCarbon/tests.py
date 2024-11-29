@@ -1,6 +1,6 @@
 
 import random
-from . import Introduction, Desicion, Result, Bot, C
+from . import Introduction, Desicion, Result, Bot, C, EndGame, Petition
 
 
 class PlayerBot(Bot):
@@ -9,4 +9,5 @@ class PlayerBot(Bot):
             yield Introduction
         yield Desicion, dict(bid_for_oil=random.randint(2000, 5500))
         yield Result
+        yield EndGame
         

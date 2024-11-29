@@ -6,7 +6,7 @@ doc = ''
 class C(BaseConstants):
     NAME_IN_URL = 'ManyDesignsCarbon'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 20
     C = cu(0)
     TAX = cu(0)
     ENDOWMENT = cu(14000)
@@ -39,8 +39,8 @@ class Player(BasePlayer):
     total_oil_price = models.CurrencyField()
     is_control = models.BooleanField()
     forgone_payoff = models.CurrencyField()
-    supporting_caron_pricing = models.BooleanField(label='Will you be willing to take actions to support carbon pricing and to reduce carbon footprints?')
-    willing_to_sign_petition = models.BooleanField(label='Would you be willing to sign a petition supporting carbon pricing and providing long-term pricing certainty?')
+    supporting_caron_pricing = models.BooleanField(label='Would you be willing to take action to support carbon pricing and reduce carbon footprints?')
+    willing_to_sign_petition = models.BooleanField(label='Would you be willing to sign a petition in support of carbon pricing and long-term pricing certainty?')
     clicked_petition = models.BooleanField(initial=False)
 def set_payoffs(player: Player):
     import random
@@ -367,4 +367,13 @@ class Petition(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == C.NUM_ROUNDS
+    
+    def vars_for_template(player: Player):
+        control_petition_link = "https://www.change.org/p/fair-and-stable-carbon-pricing-mechanisms-22acf600-ec5a-4c56-bc75-6f4eb3045b58"
+        treatement_petition_link = "https://www.change.org/p/fair-and-stable-carbon-pricing-mechanisms-8d011180-2449-4531-aa6a-46bd7e8b0dda"
+        link = (control_petition_link if player.is_control else treatement_petition_link)
+        return dict(
+            link = link,
+        )
+
 page_sequence = [Introduction, Desicion, Result, EndGame, Petition]
