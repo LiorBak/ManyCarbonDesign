@@ -31,19 +31,18 @@
     {{ if player.purchase_oil }}
     <ul>
         <li>Your bid was <b>accepted</b>. Thus you received the <b>OIL</b> option for all 5 rounds.</li>
+        <li>Your gain for the <b>decision round is {{desicion_round_gain}}</b>.</li>
     </ul>
         {{ if player.is_control }}
         <ul>
-            <li>Your gain for the <b>decision round is {{desicion_round_gain}}</b>.</li>
             <li>However, since the oil price fluctuated, your gains in the subsequent rounds were different.
             <br>Over all 5 rounds your <b>average gain is {{avg_gain}} points</b>.</li>
         </ul>
         {{ else }}
         <ul>
-            <li><b>Your gain for all 5 rounds is {{desicion_round_gain}}</b>.</li>
             <li>Although the cost of oil fluctuated in subsequent rounds, it did not affect your gains. This is because the oil taxation policy ensured that the price remained fixed at the decision-round level.<br>
                 Therefore, your gain in all 5 rounds was the same as in the decision round.<br>
-                <b>Without the taxation policy</b>, you would have paid according to the fluctuating prices. In that scenario, your average gain <b>could have been {{avg_gain}}</b> points per round.</li>
+                <b>Without the taxation policy</b>, you would have paid according to the fluctuating prices. In that scenario, your average gain <b>would have been {{avg_gain_ifnotax}}</b> points per round.</li>
         </ul>
         {{ endif }}
     {{ else }}

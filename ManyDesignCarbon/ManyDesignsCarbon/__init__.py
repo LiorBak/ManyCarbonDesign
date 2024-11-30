@@ -288,6 +288,7 @@ class Result(Page):
         # for info
         oil_free_profit = C.ENDOWMENT - C.OIL_FREE_COST
         avg_gain = float(player.payoff)/5
+        avg_gain_ifnotax = 0
         desicion_round_gain = None
         player.purchase_oil = player.bid_for_oil >= player.random_threshold
         if player.purchase_oil:
@@ -315,6 +316,8 @@ class Result(Page):
             oil_cost = (100*float(prices[r]) if pl.is_control else pl.oil_price_desicion_round)
             oil_profit = C.ENDOWMENT - pl.bid_for_oil - oil_cost
             oil_free_profit = C.ENDOWMENT - C.OIL_FREE_COST
+
+            avg_gain_ifnotax += C.ENDOWMENT - pl.bid_for_oil - 100*float(prices[r])
         
             html_table += ('<tr style="font-weight: bold; background-color: Gainsboro;">' if desicion_round else '<tr>') 
             html_table += "<td>" + str(r) + (' <i>(Desicion Round)</i>' if desicion_round else '') +"</td>"  #period
@@ -332,6 +335,7 @@ class Result(Page):
         return dict(
             html_table=html_table,
             avg_gain = avg_gain,
+            avg_gain_ifnotax = (avg_gain_ifnotax/5),
             desicion_round_gain=desicion_round_gain,
             oil_free_profit=oil_free_profit,
         )

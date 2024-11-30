@@ -9,5 +9,6 @@ class PlayerBot(Bot):
             yield Introduction
         yield Desicion, dict(bid_for_oil=random.randint(2000, 5500))
         yield Result
-        yield EndGame
+        if self.player.round_number == C.NUM_ROUNDS:
+            yield EndGame
         
