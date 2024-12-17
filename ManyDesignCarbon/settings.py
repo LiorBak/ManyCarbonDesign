@@ -49,6 +49,8 @@ DEMO_PAGE_INTRO_HTML = ''
 
 SECRET_KEY = '9727914704108'
 
+DEBUG = environ.get('DEBUG', 'False').lower() == 'true'
+
 DATABASES = {
     'default': dj_database_url.config(default=environ.get('DATABASE_URL'))
 }
