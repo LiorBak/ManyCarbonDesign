@@ -367,7 +367,7 @@ class EndGame(Page):
         )
 class Petition(Page):
     form_model = 'player'
-    form_fields = ['supporting_caron_pricing', 'willing_to_sign_petition', 'clicked_petition']
+    form_fields = ['support_carbon_pricing', 'willing_to_sign_petition', 'clicked_petition']
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == C.NUM_ROUNDS
