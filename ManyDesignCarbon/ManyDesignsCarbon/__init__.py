@@ -39,7 +39,7 @@ class Player(BasePlayer):
     total_oil_price = models.CurrencyField()
     is_control = models.BooleanField()
     forgone_payoff = models.CurrencyField()
-    supporting_caron_pricing = models.BooleanField(label='Would you be willing to take action to support carbon pricing and reduce carbon footprints?')
+    support_carbon_pricing = models.BooleanField(label='Would you be willing to take action to support carbon pricing and reduce carbon footprints?')
     willing_to_sign_petition = models.BooleanField(label='Would you be willing to sign a petition in support of carbon pricing and long-term pricing certainty?')
     clicked_petition = models.BooleanField(initial=False)
 def set_payoffs(player: Player):
