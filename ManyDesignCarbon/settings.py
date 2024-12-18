@@ -53,9 +53,7 @@ DEBUG = environ.get('DEBUG', 'False').lower() == 'true'
 
 AUTH_LEVEL = environ.get('OTREE_AUTH_LEVEL', None)
 
-DATABASES = {
-    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
-}
+
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
