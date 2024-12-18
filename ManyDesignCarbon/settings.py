@@ -1,5 +1,5 @@
 from os import environ
-#import dj_database_url
+import dj_database_url
 
 SESSION_CONFIGS = [
      dict(
@@ -51,9 +51,11 @@ SECRET_KEY = '9727914704108'
 
 DEBUG = environ.get('DEBUG', 'False').lower() == 'true'
 
-#DATABASES = {
-#    'default': dj_database_url.config(default=environ.get('DATABASE_URL'))
-#}
+AUTH_LEVEL = environ.get('OTREE_AUTH_LEVEL', None)
+
+DATABASES = {
+    'default': dj_database_url.config(default=environ.get('DATABASE_URL'))
+}
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
