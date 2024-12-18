@@ -1,5 +1,5 @@
 from os import environ
-#import dj_database_url
+import dj_database_url
 
 SESSION_CONFIGS = [
      dict(
@@ -54,6 +54,13 @@ DEBUG = environ.get('DEBUG', 'False').lower() == 'true'
 #DATABASES = {
 #    'default': dj_database_url.config(default=environ.get('DATABASE_URL'))
 #}
+
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3'
+    )
+}
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
