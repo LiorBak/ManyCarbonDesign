@@ -1,5 +1,7 @@
 from os import environ
 import dj_database_url
+import os
+from pathlib import Path
 
 SESSION_CONFIGS = [
      dict(
@@ -59,3 +61,23 @@ DATABASES = {
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
+
+
+# -- fixes for Heroku deployement --
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Directory where static files are collected
+BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Additional locations of static files
+# Define the base directory of your project
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Use Whitenoise for static file serving
+INSTALLED_APPS += ['whitenoise.runserver_nostatic']
+
+#MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE
