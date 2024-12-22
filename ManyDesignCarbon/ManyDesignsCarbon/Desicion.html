@@ -13,6 +13,11 @@
         display: block; 
         opacity: 1; 
     }
+    #hide_button {
+     position:absolute;
+     top:0;
+     right:0;
+ }
 </style>
 
 <h3>Info</h3>
@@ -59,6 +64,7 @@
 
 
 <div id="instructions" class="hidden_info card mb-2 card-body bg-light">
+    <input id="hide_button" type="button" value="X" onclick="hide_parent(this);">
     <h3>Detailed Instructions</h3>
     <p>
         After you press the "Bid":
@@ -85,6 +91,7 @@
     </ul>
 </div>
 <div id="history table" class="hidden_info card mb-2 card-body bg-light">
+    <input id="hide_button" type="button" value="X" onclick="hide_parent(this);">
     <h3>Score and Desicions History</h3>
     <table class="table">
     {{html_table}}
@@ -106,6 +113,9 @@
             element.scrollIntoView({ behavior: 'smooth' });
         }
     }
+    function hide_parent(el) {
+        el.parentNode.classList.remove('active');
+    };
 </script>
 
 
