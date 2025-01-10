@@ -124,7 +124,7 @@ class Player(BasePlayer):
                                          'More than $120,000'])
 
     # political views
-    pol_orientation = models.IntegerField(label='On economic policy matters, where do you see yourself on a scale'
+    pol_orientation = models.IntegerField(label='On economic policy matters, where do you see yourself on a scale '
                                                       'from  1 to 5, where 1 is Left and 5 is Right?',
                                                 choices=[[1,'Left'], [2,''], [3,''], [4,''], [5,'Right']],
                                                 widget=widgets.RadioSelectHorizontal)
@@ -159,7 +159,7 @@ class Player(BasePlayer):
                                       choices=['Not at all', 'A little', 'Moderately', 'A lot', 'A great deal'])
     get_evehicle = models.StringField(label='- Get an electric vehicle',
                                       choices=['Not at all', 'A little', 'Moderately', 'A lot', 'A great deal'])
-    limit_beef = models.StringField(label='- Limit beef consupmtion',
+    limit_beef = models.StringField(label='- Limit beef consumption',
                                     choices=['Not at all', 'A little', 'Moderately', 'A lot', 'A great deal'])
     limit_heating = models.StringField(label='- Limit heating',
                                        choices=['Not at all', 'A little', 'Moderately','A lot', 'A great deal'])
