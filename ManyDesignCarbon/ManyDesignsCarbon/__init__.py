@@ -21,7 +21,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     oil_price_desicion_round = models.CurrencyField()
     alternative_cost = models.CurrencyField(initial=C.OIL_FREE_COST)
-    bid_for_oil = models.CurrencyField(label='Please indicate how much you will be willing to pay for the OIL option.', max=10000, min=0)
+    bid_for_oil = models.CurrencyField(max=10000, min=0)
     random_threshold = models.CurrencyField()
     purchase_oil = models.BooleanField()
     oil_cost_t0 = models.CurrencyField()
@@ -48,7 +48,8 @@ class Player(BasePlayer):
 def set_payoffs(player: Player):
     import random
     
-    player.random_threshold = random.randint(0, C.BID_MAX_THRESHOLD)
+    if player.field_maybe_none('random_threshold') is None:
+        player.random_threshold = random.randint(0, C.BID_MAX_THRESHOLD)
     
     player.purchase_oil = player.bid_for_oil >= player.random_threshold
     oil_profit = C.ENDOWMENT*5 - (player.bid_for_oil*5) - (player.total_oil_price)
@@ -224,9 +225,23 @@ class Introduction(Page):
         return player.round_number == 1
 class Desicion(Page):
     form_model = 'player'
-    form_fields = ['bid_for_oil']
+    form_fields = ['bid_for_oil', 'first_name']
+    
+    @staticmethod
+    def js_vars(player: Player):
+        import random
+        if player.field_maybe_none('random_threshold') is None:
+            player.random_threshold = random.randint(0, C.BID_MAX_THRESHOLD)
+        return dict(
+            random_threshold=player.random_threshold,
+        )
+
     @staticmethod
     def vars_for_template(player: Player):
+        import random
+        if player.field_maybe_none('random_threshold') is None:
+            player.random_threshold = random.randint(0, C.BID_MAX_THRESHOLD)
+
         setup_player(player)
         setoil_prices(player)
         
@@ -272,6 +287,7 @@ class Desicion(Page):
         
         return dict(
             html_table=html_table,
+            random_threshold=player.random_threshold,
         )
     @staticmethod
     def before_next_page(player: Player, timeout_happened):

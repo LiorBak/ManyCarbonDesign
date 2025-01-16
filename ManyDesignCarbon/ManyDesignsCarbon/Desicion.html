@@ -18,6 +18,20 @@
         top:0;
         right:0;
     }
+    .not_selected {
+        background-color: gray !important;
+        transition: 1s;
+    }
+    .not_selected_box {
+        background-color: lightgray !important;
+        border-color: gray !important;
+        opacity: 30%;
+        transition: 1s;
+    }
+    .selected {
+        border-width: 10px !important;
+    }
+
 
     .slider-container {
         position: relative;
@@ -31,7 +45,7 @@
         appearance: none;
         width: 100%;
         height: 10px;
-        background: #ddd;
+        background: #ccc; /* Default gray background */
         border-radius: 5px;
         outline: none;
         opacity: 0.9;
@@ -41,18 +55,18 @@
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 20px;
+        width: 1px;
         height: 20px;
-        background: #4CAF50;
-        border-radius: 50%;
+        background: blue;
+        border-radius: 20%;
         cursor: pointer;
     }
 
     .slider::-moz-range-thumb {
-        width: 20px;
+        width: 1px;
         height: 20px;
-        background: #4CAF50;
-        border-radius: 50%;
+        background: blue;
+        border-radius: 20%;
         cursor: pointer;
     }
 
@@ -60,13 +74,36 @@
         position: absolute;
         top: 0;
         left: 0;
-        height: 10px;
-        background: #4CAF50;
-        border-radius: 5px 0 0 5px;
+        height: 25px;
+        background: blue;
+        border-radius: 5px 5px 5px 5px;
         pointer-events: none;
+        transition: width 0.2s ease;
+    }
+    .random-line {
+        position: absolute;
+        top: 0px;
+        width: 5px;
+        height: 25px;
+        background: red;
+        border-radius: 20%;
+        display: none;
+        transition: 0.2s ease;
+        z-index: 10;
+    }
+    #text_bid_cont {
+            display: block;
+            margin: 20px auto;
+            text-align: center !important;
+    }
+    #text_bid {
+        margin: 0px;
+    }
+    #random_tresholds_text {
+        color: red;
+        font-weight: bold;
     }
 </style>
-
 <h3>Info</h3>
 
 <p>
@@ -76,40 +113,56 @@
 
 <div style="display: flex; justify-content: space-evenly; align-items: stretch; margin: 20px 0;">
     <!-- Box for OIL Option -->
-    <div style="border: 2px solid #007BFF; border-radius: 8px; padding: 20px; width: 45%; text-align: center; background-color: #f0f8ff; display: flex; flex-direction: column; justify-content: space-between;">
+    <div id='OIL-BOX' style="border: 2px solid #007BFF; border-radius: 8px; padding: 20px; width: 45%; text-align: center; background-color: #f0f8ff; display: flex; flex-direction: column; justify-content: space-between;">
         <h4>OIL</h4>
-        <button style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Cost: <b>{{player.oil_price_desicion_round}}</b></button>
+        <button id='OIL' style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px;" disabled>Cost: <b>{{player.oil_price_desicion_round}}</b></button>
         <p>
             To win this, place bid as high as possible. However, if the bid will be accepted, the amount you bid will be deducted from your gains.
         </p>
     </div>
     
     <!-- Box for OIL-FREE Alternative -->
-    <div style="border: 2px solid #28A745; border-radius: 8px; padding: 20px; width: 45%; text-align: center; background-color: #f9fff9; display: flex; flex-direction: column; justify-content: space-between;">
+    <div id='OIL-FREE-BOX' style="border: 2px solid #28A745; border-radius: 8px; padding: 20px; width: 45%; text-align: center; background-color: #f9fff9; display: flex; flex-direction: column; justify-content: space-between;">
         <h4>OIL-FREE Alternative</h4>
-        <button style="padding: 10px 20px; background-color: #28A745; color: white; border: none; border-radius: 5px; cursor: pointer;">Cost: <b>{{C.OIL_FREE_COST}}</b></button>
+        <button id='OIL-FREE' style="padding: 10px 20px; background-color: #28A745; color: white; border: none; border-radius: 5px;"disabled>Cost: <b>{{C.OIL_FREE_COST}}</b></button>
         <p>
              If your bid will be too low, you will get this alternative.
         </p>
     </div>
 </div>
 
-{{ if player.round_number != 1}}
-<p><a href="javascript:void(0);" onclick="showSection('history table')">See history of your bids and scores</a></p>
-{{ endif}}
-
 <h3>Your Bid</h3>
-<div>
-    <p>
-        {{ formfields }} <button name="bid" class="btn btn-primary btn-large">Bid</button>
-    </p>
+<p>
+    Using the slider or the text box, please indicate how much you will be willing to pay for the OIL option.
+</p>
+<div class="slider-container">
+    <div class="fill" id="slider-fill" style="width: 0;"></div>
+    <div class="random-line" id="random-line"></div>
+    <input 
+        type="range" 
+        min="0" 
+        max="10000" 
+        value="" 
+        class="slider" 
+        id="bid-slider"
+    >
+    <div id="text_bid_cont">
+        <div class="input-group input-group-narrow">
+            <input type="number" class="form-control" inputmode="numeric" id="text_bid" max="10000" min="0" name="bid_for_oil" required="" value="">
+            <button id='bid_btn' class="input-group-text btn btn-primary btn-large" name="bid" onclick="made_bid()">Bid</button>
+        </div>
+        <span id="info_on_rand"></span>
+    </div>
 </div>
 
-<p style="display: flex; justify-content: space-between;">
-
-    <a href="javascript:void(0);" onclick="showSection('instructions')">See detailed instructions</a>
-</p>
-
+<div id="info-links">
+    <p style="display: flex; justify-content: space-between;">
+        <a href="javascript:void(0);" onclick="showSection('instructions')">See detailed instructions</a>
+    </p>
+    {{ if player.round_number != 1}}
+    <p><a href="javascript:void(0);" onclick="showSection('history table')">See history of your bids and scores</a></p>
+    {{ endif}}
+</div>
 
 <div id="instructions" class="hidden_info card mb-2 card-body bg-light">
     <input id="hide_button" type="button" value="X" onclick="hide_parent(this);">
@@ -146,8 +199,141 @@
     </table>
 </div>
 
+<div style="display: none;">{{ formfield 'bid_for_oil' }} {{ formfield 'first_name' }}</div> <!-- prevents early page submitions-->
 
 <script>
+    const slider = document.getElementById('bid-slider');
+    const fill = document.getElementById('slider-fill');
+    const bidInput = document.getElementById('text_bid');
+    const randomLine = document.getElementById('random-line');
+    const rand_info_id = document.getElementById('info_on_rand');
+    const text_bid_cont = document.getElementById('text_bid_cont')
+    const formfields = {
+        'bid_for_oil': document.getElementById('id_bid_for_oil'),
+        'is_pass': document.getElementById('id_first_name')
+    }
+    let legal_bid = false
+
+    // Initialize without value
+    slider.value = "";
+    bidInput.value = "";
+
+    // Ensure slider starts with a neutral gray background
+    slider.style.background = '#ccc';
+
+    // Update the fill bar and input box when the slider is moved
+    slider.addEventListener('input', function() {
+        let value = validate_value(slider.value);
+        const percentage = (value / slider.max) * 100;
+        fill.style.width = percentage + '%';
+        slider.style.background = `linear-gradient(to right, blue 0%, blue ${percentage}%, green ${percentage}%, green 100%)`;
+        bidInput.value = value;
+        formfields.bid_for_oil.value = parseInt(bidInput.value);
+        if (formfields.bid_for_oil.value != '') {legal_bid = true;}
+    });
+
+    // Update slider position and fill when the input box value changes
+    bidInput.addEventListener('input', function() {
+        let value = parseInt(bidInput.value, 10) || 0;
+        if (value < slider.min) value = slider.min;
+        if (value > slider.max) value = slider.max;
+        slider.value = value;
+        const percentage = Math.min((value / slider.max) * 100, 100);
+        fill.style.width = percentage + '%';
+        slider.style.background = `linear-gradient(to right, blue 0%, blue ${percentage}%, green ${percentage}%, green 100%)`;
+        formfields.bid_for_oil.value = parseInt(bidInput.value);
+        if (formfields.bid_for_oil.value != '') {legal_bid = true;}
+    });
+
+    // Update the fill bar on click/drag interactions
+    slider.addEventListener('click', function(event) {
+        const rect = slider.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const percentage = Math.min(offsetX / rect.width, 1);
+        const value = validate_value(Math.round(percentage * slider.max));
+        slider.value = value;
+        fill.style.width = percentage * 100 + '%';
+        slider.style.background = `linear-gradient(to right, blue 0%, blue ${percentage * 100}%, green ${percentage * 100}%, green 100%)`;
+        bidInput.value = value;
+        formfields.bid_for_oil.value = parseInt(bidInput.value);
+        if (formfields.bid_for_oil.value != '') {legal_bid = true;}
+    });
+
+    function validate_value(value) {
+        return (Math.max(Math.min(value, slider.max), slider.min))
+    }
+    // Simulate the random threshold line for BDM method
+    function simulateRandomThreshold(randomThreshold) {
+        randomLine.style.display = 'block';
+        rand_info_id.innerHTML = 'Generating random treshold for bids';
+        let currentPercentage = 0;
+        const targetPercentage = (randomThreshold / slider.max) * 100;
+        const hits = 2; 
+        let currentHits = 0;
+        let direction = 1; // 1 for forward, -1 for backward
+
+        const interval = setInterval(() => {
+        // Adjust movement based on direction
+            currentPercentage += direction * Math.random() * 15; // Random step size for animation effect
+            if (currentPercentage >= 100) {
+                currentPercentage = 100; // Cap to the slider's maximum
+                direction = -1; // Reverse direction
+                currentHits++;
+            } else if (currentPercentage <= 0) {
+                currentPercentage = 0; // Cap to the slider's minimum
+                direction = 1; // Reverse direction
+                currentHits++;
+            }
+            if (currentHits >= hits && direction === 1 && currentPercentage >= targetPercentage) {
+                currentPercentage = targetPercentage;
+                const OIL = document.getElementById('OIL')
+                const OIL_FREE = document.getElementById('OIL-FREE')
+                const OIL_BOX = document.getElementById('OIL-BOX')
+                const OIL_FREE_BOX = document.getElementById('OIL-FREE-BOX')
+                let text = "This round, the random threshold for bids is <span id='random_tresholds_text'>{{random_threshold}}</span>";
+                text += "<br>"
+                if (formfields.bid_for_oil.value >= js_vars.random_threshold) {
+                    text += 'Your bid was higher than the threshold. Thus, you received the <b>OIL</b> option'
+                    OIL_FREE.classList.add('not_selected')
+                    OIL_FREE_BOX.classList.add('not_selected_box')
+                    flesh_box(OIL_BOX)
+                } else {
+                    text += "Your bid wasn't high enough. Thus, you received the <b>OIL-FREE alternative</b>"
+                    OIL.classList.add('not_selected')
+                    OIL_BOX.classList.add('not_selected_box')
+                    flesh_box(OIL_FREE_BOX)
+                }
+                text += `<br><button id="bid_btn" class="input-group-text btn btn-primary btn-large" >See the payoff of future rounds</button>`
+                
+                rand_info_id.innerHTML = text
+                clearInterval(interval);
+            }
+            randomLine.style.left = `${currentPercentage}%`;
+        }, 50);
+    }
+
+    function flesh_box(el) {
+        //el.style.transition = "0.3s"
+        el.classList.add('.selected')
+        setTimeout(function() {
+            el.classList.remove('.selected')
+        }, 500);
+    }
+    function made_bid() {
+        if (!legal_bid) { return }
+        if (parseInt(bidInput.value) > parseInt(slider.max)) {return}
+        bidInput.value = validate_value(bidInput.value)
+        const bid_btn = document.getElementById('bid_btn')
+        bid_btn.disabled = true;
+        bidInput.disabled = true;
+        slider.disabled = true;
+        simulateRandomThreshold(js_vars.random_threshold);
+        document.getElementById('info-links').classList.add('hidden_info')
+        formfields.is_pass.value= "-"; // to allow player to pass to Results page when any btn is clicked
+    }
+
+
+
     function showSection(id) {
         // Hide all hidden_info sections
         document.querySelectorAll('.hidden_info').forEach(section => {
@@ -164,7 +350,6 @@
     function hide_parent(el) {
         el.parentNode.classList.remove('active');
     };
-
 </script>
 
 
