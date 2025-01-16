@@ -3,23 +3,10 @@
 
 {{ block content }}
 
-
 {{ formfield 'support_carbon_pricing' }}
 {{ formfield 'willing_to_sign_petition' }}
-{{ formfield_errors 'clicked_petition' }}
 
-If you'd like to sign the petition, <b>you can find it here: <a href="{{link}}" class="link" target="_blank" onmousedown='petition_clicked();'>Carbon Pricing Petition</a></b>.
-
-<input type="hidden" name="clicked_petition" id="clicked_petition" />
 {{ next_button }}
 
 {{ endblock }}
 
-{{ block scripts }}
-<script>
-function petition_clicked() {
-    document.getElementById('clicked_petition').value = true;
-}
-document.getElementById('clicked_petition').value = false;
-</script>
-{{ endblock }}

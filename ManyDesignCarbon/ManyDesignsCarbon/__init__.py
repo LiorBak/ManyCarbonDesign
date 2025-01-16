@@ -19,8 +19,6 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     pass
 class Player(BasePlayer):
-    age = models.IntegerField(label='What is your age', max=125, min=13)
-    gender = models.StringField(choices=[['Male', 'Male'], ['Female', 'Female']], label='What is your gender', widget=widgets.RadioSelect)
     oil_price_desicion_round = models.CurrencyField()
     alternative_cost = models.CurrencyField(initial=C.OIL_FREE_COST)
     bid_for_oil = models.CurrencyField(label='Please indicate how much you will be willing to pay for the OIL option.', max=10000, min=0)
@@ -40,8 +38,13 @@ class Player(BasePlayer):
     is_control = models.BooleanField()
     forgone_payoff = models.CurrencyField()
     support_carbon_pricing = models.BooleanField(label='Would you be willing to take action to support carbon pricing and reduce carbon footprints?')
-    willing_to_sign_petition = models.BooleanField(label='Would you be willing to sign a petition in support of carbon pricing and long-term pricing certainty?')
-    clicked_petition = models.BooleanField(initial=False)
+    willing_to_sign_petition = models.BooleanField(label='Would you be willing to sign a petition supporting a carbon pricing approach specifically designed to ensure long-term pricing stability?')
+    first_name = models.StringField(label='First Name')
+    last_name = models.StringField(label='Last Name')
+    email = models.StringField(label='Email')
+    sign_because = models.StringField(label="I'm signing because... (optional)", blank=True)
+    prefer_anonymous_sign = models.BooleanField(label="How should your name and comment appear on this petition?", initial=False, choices=[[True, 'Sign anonymously'], [False, 'Display my name and comment']])
+
 def set_payoffs(player: Player):
     import random
     
@@ -367,7 +370,7 @@ class EndGame(Page):
         )
 class Petition(Page):
     form_model = 'player'
-    form_fields = ['support_carbon_pricing', 'willing_to_sign_petition', 'clicked_petition']
+    form_fields = ['support_carbon_pricing', 'willing_to_sign_petition']
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == C.NUM_ROUNDS
@@ -379,5 +382,19 @@ class Petition(Page):
         return dict(
             link = link,
         )
+class SignPetition(Page):
+    form_model = 'player'
+    form_fields = ['first_name', 'last_name', 'email', 'sign_because', 'prefer_anonymous_sign']
 
-page_sequence = [Introduction, Desicion, Result, EndGame, Petition]
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == C.NUM_ROUNDS and player.willing_to_sign_petition
+    def vars_for_template(player: Player):
+        control_petition_link = "https://www.change.org/p/fair-and-stable-carbon-pricing-mechanisms-22acf600-ec5a-4c56-bc75-6f4eb3045b58"
+        treatement_petition_link = "https://www.change.org/p/fair-and-stable-carbon-pricing-mechanisms-8d011180-2449-4531-aa6a-46bd7e8b0dda"
+        link = (control_petition_link if player.is_control else treatement_petition_link)
+        return dict(
+            link = link,
+        )   
+
+page_sequence = [Introduction, Desicion, Result, EndGame, Petition, SignPetition]
