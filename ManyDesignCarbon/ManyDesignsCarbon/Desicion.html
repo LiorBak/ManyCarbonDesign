@@ -268,13 +268,13 @@
         rand_info_id.innerHTML = 'Generating random treshold for bids';
         let currentPercentage = 0;
         const targetPercentage = (randomThreshold / slider.max) * 100;
-        const hits = 2; 
+        const hits = 3; 
         let currentHits = 0;
         let direction = 1; // 1 for forward, -1 for backward
 
         const interval = setInterval(() => {
         // Adjust movement based on direction
-            currentPercentage += direction * Math.random() * 15; // Random step size for animation effect
+            currentPercentage += direction * Math.random() * (20/currentHits); // Random step size for animation effect
             if (currentPercentage >= 100) {
                 currentPercentage = 100; // Cap to the slider's maximum
                 direction = -1; // Reverse direction
@@ -284,7 +284,8 @@
                 direction = 1; // Reverse direction
                 currentHits++;
             }
-            if (currentHits >= hits && direction === 1 && currentPercentage >= targetPercentage) {
+            if (currentHits >= hits && direction === 1 && currentPercentage >= targetPercentage+8 || 
+                    currentHits >= hits && direction === -1 && currentPercentage <= targetPercentage-8) {
                 currentPercentage = targetPercentage;
                 const OIL = document.getElementById('OIL')
                 const OIL_FREE = document.getElementById('OIL-FREE')
@@ -292,7 +293,7 @@
                 const OIL_FREE_BOX = document.getElementById('OIL-FREE-BOX')
                 let text = "This round, the random threshold for bids is <span id='random_tresholds_text'>{{random_threshold}}</span>";
                 text += "<br>"
-                if (formfields.bid_for_oil.value >= js_vars.random_threshold) {
+                if (formfields.bid_for_oil.value >= randomThreshold) {
                     text += 'Your bid was higher than the threshold. Thus, you received the <b>OIL</b> option'
                     OIL_FREE.classList.add('not_selected')
                     OIL_FREE_BOX.classList.add('not_selected_box')
